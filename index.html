@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Index Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBT-bif7_lM8FRutF0aYsSqFszDnIyv5bg&libraries=visualization"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <a href="index.html"><img src="Images New/LOGO.jpeg" alt="AQI Logo"></a>
+            <strong>Act for Cleaner Breaths</strong>
+        </div>
+        <!-- <div class="search-bar">
+            <input type="text" placeholder="Search any Location, City, State or Country">
+            <button>&#128269;</button>
+        </div> -->
+        <div class="select-container">
+            <label for="options">Select the Location:</label>
+            <select id="options" name="options">
+                <option value="" disabled selected>-- Select a Location --</option>
+                <option value="option1">Anand Vihar</option>
+                <option value="option2">Burari</option>
+                <option value="option3">Civil Lines</option>
+                <option value="option4">DTU Delhi</option>
+                <option value="option5">IGI Airport Terminal-3, Delhi</option>
+                <option value="option6">Jawaharlal Nehru Stadium, Delhi</option>
+                <option value="option7">Lodhi Garden, Delhi</option>
+                <option value="option8">Mother Dairy Plant, Parparganj, Delhi</option>
+                <option value="option9">National Institute of Malaria Research, Sector 8, Dwarka, Delhi</option>
+                <option value="option9">New Delhi US Embassy</option>
+                <option value="option10">PGDAV College, Sriniwaspuri, Delhi</option>
+                <option value="option11">Pusa, Delhi</option>
+                <option value="option12">Punjabi Bagh, Delhi</option>
+                <option value="option13">R.K. Puram, Delhi</option>
+                <option value="option14">Shaheed Sukhdev</option>
+                <option value="option15">Siri Fort, Delhi</option>
+                <option value="option16">Satyawati College, Delhi</option>
+                <option value="option17">North Campus, Delhi</option>
+                <option value="option18">Pooth Khurd</option>
+                <option value="option19">ITI Jahangripuri</option>
+                <option value="option20">Satyawati College, Delhi</option>
+            </select>
+        </div>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Blogs</a>
+                <div class="dropdown-content">
+                    <a href="https://www.cnbc.com/2024/12/19/delhis-suffocating-smog-conundrum.html">Delhi's suffocating
+                        smog conundrum</a>
+                    <a
+                        href="https://www.cnbctv18.com/india/delhi-air-quality-deteriorates-to-severe-category-low-visibility-at-airport-indigo-air-india-spicejet-19510746.html">Delhi
+                        air quality deteriorates to 'severe' category</a>
+                    <a
+                        href="https://www.india-briefing.com/news/delhi-air-quality-aqi-economic-costs-policy-response-35179.html/">Air
+                        Pollution's Economic Impact on Delhi</a>
+                    <a
+                        href="https://edition.cnn.com/2023/11/16/india/new-delhi-beijing-pollution-levels-intl-hnk-dst/index.html">Impact
+                        on Life Expectancy in Delhi</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Policies</a>
+                <div class="dropdown-content">
+                    <div class="nested-dropdown">
+                        <!-- <a href="#" class="nested-dropbtn">Government</a> -->
+                        <div class="nested-content">
+                            <a
+                                href="https://www.hindustantimes.com/cities/delhi-news/delhi-govt-unveils-21-point-winter-action-plan-to-combat-air-pollution-101727337691391.html">Winter
+                                Action Plan</a>
+                            <a href="https://pib.gov.in/PressReleasePage.aspx?PRID=1983680">Pollution Control
+                                Strategies</a>
+                        </div>
+                    </div>
+                    <div class="nested-dropdown">
+                        <!-- <a href="#" class="nested-dropbtn">NGOs</a> -->
+                        <div class="nested-content">
+                            <a href="https://a-pag.org/projects/ncap-enhancing-effectiveness-of-the-ncap-2022/">NCAP
+                                Effectiveness</a>
+                            <a
+                                href="https://a-pag.org/projects/delhi-identifying-and-acting-on-dispersed-sources-of-air-pollution/">Pollution
+                                Resolution Progress</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="contactUs.html">Contact Us</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Major Air Pollutants</h2><br>
+        <div class="AQIBOX">
+            <img src="" alt=""><br>
+            <strong>AQI 198</strong>
+        </div>
+        <div class="pollutant-grid">
+            <div class="pollutant-grid1">
+                <div class="pollutant">
+                    <img src="Images New/pm25.svg" alt="PM2.5"><br>
+                    <strong>Particulate Matter (PM2.5)</strong>
+                    <p><span id="pm25-value">88</span> &micro;g/m<sup>3</sup></p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/pm10.svg" alt="PM10"><br>
+                    <strong>Particulate Matter (PM10)</strong>
+                    <p><span id="pm10-value">145</span> &micro;g/m<sup>3</sup></p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/co.svg" alt="CO"><br>
+                    <strong>Carbon Monoxide (CO)</strong>
+                    <p><span id="co-value">795</span> ppb</p>
+                </div>
+            </div>
+            <div class="pollutant-grid1">
+                <div class="pollutant">
+                    <img src="Images New/so2.svg" alt="SO2"><br>
+                    <strong>Sulfur Dioxide (SO2)</strong>
+                    <p><span id="so2-value">8</span> ppb</p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/no2.svg" alt="NO2"><br>
+                    <strong>Nitrogen Dioxide (NO2)</strong>
+                    <p><span id="no2-value">17</span> ppb</p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/o3.svg" alt="O3"><br>
+                    <strong>Ozone (O3)</strong>
+                    <p><span id="o3-value">8</span> ppb</p>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- Weather Info Box -->
+        <section class="weather-info">
+            <div class="weather-box">
+                <h1>Weather Information</h1>
+                <p><strong>Temperature:</strong> <span id="temperature">--</span> °C</p>
+                <p><strong>Max. Temperature:</strong> <span id="temperature">--</span> °C</p>
+                <p><strong>Min. Temperature:</strong> <span id="temperature">--</span> °C</p>
+                <p><strong>Wind Speed:</strong> <span id="wind-speed">--</span> km/h</p>
+                <p><strong>Humidity:</strong> <span id="humidity">--</span>%</p>
+                <p><strong>Visibilty:</strong> <span id="Visibilty">--</span>Km</p>
+            </div>
+        </section>
+    </div>
+    <!-- Add this in index.html where you want the graph to appear -->
+    <div class="container">
+        <h2>Historical AQI Data</h2>
+        <div class="graph-controls">
+            <label for="timeRange">Select Time Range:</label>
+            <select id="timeRange">
+                <option value="7days">Last 7 Days</option>
+                <option value="1month">Last Month</option>
+            </select>
+        </div>
+        <canvas id="aqiChart"></canvas>
+    </div>
+    <!-- Add this in index.html where you want the heatmap to appear -->
+    <div class="container">
+        <h2>Real-time AQI Heatmap</h2>
+        <div id="heatmap"><img src="./Images/Heatmap.png" alt=""></div>
+    </div>
+
+    <!-- Add this before closing body tag -->
+    <script src="script.js"></script>
+    <script>
+        
+    </script>
+    <div class="aqi-scale">
+        <h2>Air Quality Index (AQI) Scale</h2><br>
+        <p>Know about the category of air quality index (AQI) your ambient air falls in and what it implies.</p>
+        <!-- AQI categories and descriptions -->
+        <div class="good">
+            <div class="good1">
+                <span style="color: rgb(30, 255, 0); font-size: 25px;">
+                    <strong>Good</strong> (0 to 50)
+                </span>
+                <span style="font-size: 23px;">
+                    <br>The air is fresh and free from toxins. Enjoy outdoor activities without any health concerns.
+                </span>
+            </div>
+            <img src="Images New/good-aqi-level.svg" alt="Good">
+        </div>
+
+        <div class="moderate">
+            <div class="moderate2">
+                <span style="color: rgb(255, 251, 0); font-size: 25px;">
+                    <strong>Moderate</strong> (50 to 100)
+                </span>
+                <span style="font-size: 23px;">
+                    <br>Air quality is acceptable for most, but sensitive individuals might experience mild discomfort.
+                </span>
+            </div>
+            <img src="Images New/moderate-aqi-level.svg" alt="Moderate">
+        </div>
+
+        <div class="poor">
+            <div class="poor1">
+                <span style="color: rgb(255, 115, 0); font-size: 25px;">
+                    <strong>Poor</strong> (100 to 200)
+                </span>
+                <span style="font-size: 23px;">
+                    <br>Breathing may become slightly uncomfortable, especially for those with respiratory issues.
+                </span>
+            </div>
+            <img src="Images New/poor-aqi-level.svg" alt="Poor">
+        </div>
+
+        <div class="unhealthy">
+            <div class="unhealthy1">
+                <span style="color: rgb(233, 51, 35); font-size: 25px;">
+                    <strong>Unhealthy</strong> (200 to 300)
+                </span>
+                <span style="font-size: 23px;">
+                    <br>This air quality is particularly risky for children, pregnant women, and the elderly. Limit
+                    outdoor activities.
+                </span>
+            </div>
+            <img src="Images New/unhealthy-aqi-level.svg" alt="Unhealthy">
+        </div>
+
+        <div class="severe">
+            <div class="severe1">
+                <span style="color: rgb(149, 0, 255); font-size: 25px;">
+                    <strong>Severe</strong> (300 to 400)
+                </span>
+                <span style="font-size: 23px;">
+                    <br>Prolonged exposure can cause chronic health issues or organ damage. Avoid outdoor activities.
+                </span>
+            </div>
+            <img src="Images New/severe-aqi-level.svg" alt="Severe">
+        </div>
+
+        <div class="hazardous">
+            <div class="hazardous1">
+                <span style="color: rgb(120, 41, 48); font-size: 25px;">
+                    <strong>Hazardous</strong> (400 to 500+)
+                </span>
+                <span style="font-size: 23px;">
+                    <br>Dangerously high pollution levels. Life-threatening health risks with prolonged exposure. Stay
+                    indoors and take precautions.
+                </span>
+            </div>
+            <img src="Images New/hazardous-aqi-level.svg" alt="Hazardous">
+        </div>
+    </div>
+    <section class="health-risks">
+        <h1>Prevent Health Problems: Understand Your Risks</h1>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('asthma')">Asthma</button>
+            <button class="tab" onclick="showTab('heart')">Heart Issues</button>
+            <button class="tab" onclick="showTab('allergies')">Allergies</button>
+            <button class="tab" onclick="showTab('sinus')">Sinus</button>
+            <button class="tab" onclick="showTab('cold')">Cold/Flu</button>
+            <button class="tab" onclick="showTab('copd')">Chronic (COPD)</button>
+        </div>
+        <div class="content">
+            <!-- Asthma -->
+            <div class="info-card" id="asthma" style="display: block;">
+                <h2>Asthma <div class="imgAsthama"><img src="Images New/Asthma.jpeg" alt=""></div>
+                </h2>
+                <p>Risk of Asthma symptoms is <strong>High</strong> when AQI is <span class="aqi">Very Poor
+                        (200-300)</span>.</p>
+                <p>Severe symptoms, such as difficulty in breathing, chest tightness, and coughing.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li> Use a mask while stepping outdoors.</li>
+                            <li> Carry your inhaler at all times.</li>
+                            <li> Check air quality daily and limit outdoor activities during high AQI.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li> Engage in strenuous outdoor activities.</li>
+                            <li> Ignore early signs of breathing discomfort.</li>
+                            <li> Stay near industrial or construction zones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Heart Issues -->
+            <div class="info-card" id="heart" style="display: none;">
+                <h2>Heart Issues <div class="imgAsthama"><img src="Images New/Heart Disease.jpeg" alt=""></h2>
+                <p>Risk of Heart Issues is <strong>High</strong> when AQI is <span class="aqi">Severe (300+)</span>.</p>
+                <p>Symptoms include chest pain, fatigue, and increased risk of heart attack.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li> Stay in well-ventilated indoor spaces.</li>
+                            <li> Keep prescribed medications handy.</li>
+                            <li> Consult your doctor if symptoms worsen.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li> Smoke or expose yourself to second-hand smoke.</li>
+                            <li> Ignore warning signs like chest pain or dizziness.</li>
+                            <li> Undertake physical exertion outdoors.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Allergies -->
+            <div class="info-card" id="allergies" style="display: none;">
+                <h2>Allergies <div class="imgAsthama"><img src="Images New/Allergies.jpeg" alt=""></h2>
+                <p>Risk of Allergies is <strong>Moderate</strong> when AQI is <span class="aqi">Poor (50-200)</span>.
+                </p>
+                <p>Common symptoms include sneezing, itchy eyes, and nasal congestion.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li> Use air purifiers at home.</li>
+                            <li> Wash your hands and face frequently.</li>
+                            <li> Keep windows closed during high pollen or pollution levels.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li> Avoid areas with high pollen or dust levels.</li>
+                            <li> Touch your face or eyes without washing your hands.</li>
+                            <li> Ignore persistent allergy symptoms.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Sinus -->
+            <div class="info-card" id="sinus" style="display: none;">
+                <h2>Sinus <div class="imgAsthama"><img src="Images New/Sinus.jpeg" alt=""></div>
+                </h2>
+                <p>Risk of Sinus symptoms is <strong>Mid.</strong> when AQI is <span class="aqi">Poor (50-200)</span>.
+                </p>
+                <p>Moderate to severe symptoms, such as a runny nose, facial pressure, and headache.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li> Check air quality regularly to avoid exposure.</li>
+                            <li> Avoid nasal allergy triggers.</li>
+                            <li> Stay indoors during high pollution levels.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li> Smoke or expose yourself to outdoor smoke.</li>
+                            <li> Avoid strenuous activities outdoors.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Cold/Flu -->
+            <div class="info-card" id="cold" style="display: none;">
+                <h2>Cold/Flu <div class="imgAsthama"><img src="Images New/Cold & Flu.jpeg" alt=""></div>
+                </h2>
+                <p>Risk of Cold/Flu symptoms is <strong>High</strong> during seasonal changes and poor AQI.</p>
+                <p>Common symptoms include sore throat, fever, and body aches.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li> Drink warm fluids to stay hydrated.</li>
+                            <li> Wear warm clothes during cold weather.</li>
+                            <li> Rest adequately to boost immunity.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li> Expose yourself to sudden temperature changes.</li>
+                            <li> Avoid overexertion or lack of sleep.</li>
+                            <li> Neglect symptoms like high fever or prolonged cough.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Chronic COPD -->
+            <div class="info-card" id="copd" style="display: none;">
+                <h2>Chronic (COPD)<div class="imgAsthama"><img src="Images New/chronic.jpeg" alt=""></div>
+                </h2>
+                <p>Risk of COPD symptoms is <strong>Severe</strong> when AQI is <span class="aqi">Very Poor
+                        (200-300)</span>.</p>
+                <p>Severe symptoms, such as wheezing, breathlessness, and chronic cough.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li> Use prescribed medications and inhalers regularly.</li>
+                            <li> Stay in a pollution-free environment.</li>
+                            <li> Consult a doctor if breathing issues worsen.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li> Smoke or stay in smoky areas.</li>
+                            <li> Ignore early symptoms of breathlessness.</li>
+                            <li> Stay outdoors for long periods during high pollution.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <div class="footer">
+        &copy; 2025 AQI Monitoring. All rights reserved.
+        <div class="container">
+            <header style="background-color: #007BFF;">
+                <h1>Contact Us</h1>
+            </header>
+
+            <section class="contact-info">
+                <h2>We'd love to hear from you!</h2>
+                <p></p>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3500.071392836267!2d77.20926538414979!3d28.68751091281082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd03511f3c2b%3A0x44049659f5999b62!2sFaculty%20of%20Technology!5e0!3m2!1sen!2sin!4v1736441570507!5m2!1sen!2sin"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </section>
+        </div>
+</body>
+
+</html>
