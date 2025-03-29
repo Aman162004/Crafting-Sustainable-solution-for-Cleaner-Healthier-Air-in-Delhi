@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Index Monitoring</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1c1c1c;
+            color: white;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        nav .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav .logo strong {
+            font-size: 18px;
+            color: white;
+        }
+
+        nav .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #444;
+            border-radius: 5px;
+            padding: 5px 10px;
+            flex-grow: 1;
+            margin: 10px;
+        }
+
+        nav .search-bar input {
+            border: none;
+            background: none;
+            color: white;
+            outline: none;
+            padding: 5px;
+            flex-grow: 1;
+        }
+
+        nav .search-bar button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        nav .menu {
+            display: flex;
+            align-items: center;
+        }
+
+        nav .menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+
+        nav .menu a:hover {
+            text-decoration: underline;
+        }
+
+        nav .menu .dropdown {
+            position: relative;
+        }
+
+        nav .menu .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        nav .menu .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        nav .menu .dropdown-content a {
+            display: block;
+            color: white;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        nav .menu .dropdown-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+            }
+
+            nav .logo {
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            nav .search-bar {
+                width: 100%;
+            }
+
+            nav .menu {
+                justify-content: space-around;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .pollutant-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on smaller screens */
+
+
+        .pollutant-grid1 {
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 columns on smaller screens */
+        }
+
+
+        */
+
+        /* Main Content */
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* AQI Scale */
+        .aqi-scale h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .aqi-scale div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .aqi-scale div span {
+            flex: 1;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .aqi-scale div img {
+            height: 80px;
+            width: auto;
+            margin-left: 10px;
+        }
+
+        .aqi-scale .good,
+        .aqi-scale .moderate,
+        .aqi-scale .poor,
+        .aqi-scale .unhealthy,
+        .aqi-scale .severe,
+        .aqi-scale .hazardous {
+            background-color: #2c2c2c;
+        }
+
+        /* Pollutants Section */
+        .pollutant-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns */
+            grid-gap: 20px;
+            /* Space between the boxes */
+            margin: 20px;
+        }
+
+        .pollutant {
+            border-left: 2px solid #4CAF50;
+            border-right: 2px solid #ff0000;
+            border-top: 2px solid #4CAF50;
+            border-bottom: 2px solid #ff0000;
+            /* Example color border */
+            padding: 20px;
+            text-align: center;
+            margin: 10px;
+            border-radius: 8px;
+            background-color: #2c2c2c;
+            /* Light background for each box */
+        }
+
+
+        .pollutant img {
+            width: 50px;
+            /* Set image size */
+            height: auto;
+        }
+
+        .weather-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 columns side by side */
+            grid-gap: 20px;
+            /* Space between the weather info boxes */
+            margin: 20px;
+            justify-content: center;
+        }
+
+        .pollutant-grid h2 {
+            text-align: center;
+        }
+
+        .pollutant-grid p {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+
+        .weather-box {
+            border: 2px solid #4CAF50;
+            /* Same border style as pollutants */
+            padding: 20px;
+            height: auto;
+            width: 500px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #2c2c2c;
+            /* Light background for each box */
+        }
+
+        .weather-info h3 {
+            text-align: center;
+        }
+
+        .weather-info p {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+            }
+
+            nav .logo {
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            nav .search-bar {
+                width: 100%;
+            }
+
+            nav .menu {
+                justify-content: space-around;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .pollutant-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on smaller screens */
+            }
+
+            .pollutant-grid1 {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on smaller screens */
+            }
+
+            .weather-info {
+                grid-template-columns: 1fr;
+                /* Stack weather info on smaller screens */
+            }
+        }
+
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* precaution  */
+        .health-risks {
+            background-color: #1c1c1c;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .health-risks h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .health-risks .location {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            background-color: #2c2c2c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            background-color: #007BFF;
+        }
+
+        .info-card {
+            display: flex;
+            gap: 20px;
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .image-section {
+            flex: 1;
+            text-align: center;
+        }
+
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .image-section .status {
+            background-color: #ffdb58;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .text-section {
+            flex: 2;
+        }
+
+        .text-section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .text-section .aqi {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .do-dont {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .dos,
+        .donts {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .dos ul,
+        .donts ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dos li,
+        .donts li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .dos li::before {
+            content: "✔";
+            color: green;
+            margin-right: 5px;
+        }
+
+        .donts li::before {
+            content: "✖";
+            color: red;
+            margin-right: 5px;
+        }
+
+        /* Weather Info */
+        .weather-info {
+            background-color: #2c2c2c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .weather-box h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+            }
+
+            nav .logo {
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            nav .search-bar {
+                width: 100%;
+            }
+
+            nav .menu {
+                justify-content: space-around;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .pollutant-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on smaller screens */
+            }
+
+            .pollutant-grid1 {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on smaller screens */
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+    <nav>
+        <div class="logo">
+            <img src="Images New/LOGO.jpeg" alt="AQI Logo">
+            <strong>Act for Cleaner Breaths</strong>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search any Location, City, State or Country">
+            <button>&#128269;</button>
+        </div>
+        <div class="menu">
+            <a href="#">Ranking</a>
+            <div class="dropdown">
+                <a href="#">Products &#x25BE;</a>
+                <div class="dropdown-content">
+                    <a href="#">Product 1</a>
+                    <a href="#">Product 2</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#">Resources &#x25BE;</a>
+                <div class="dropdown-content">
+                    <a href="#">Resource 1</a>
+                    <a href="#">Resource 2</a>
+                </div>
+            </div>
+            <a href="contactUs.html">Contact Us</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- <h2>Major Air Pollutants</h2>
+            <p>New Delhi</p> -->
+        <div class="pollutant-grid">
+            <h2>Major Air Pollutants</h2><br>
+            <p>New Delhi</p>
+            <div class="pollutant-grid1">
+                <div class="pollutant">
+                    <img src="Images New/pm25.svg" alt="PM2.5"><br>
+                    <strong>Particulate Matter (PM2.5)</strong>
+                    <p><span id="pm25-value">88</span> &micro;g/m<sup>3</sup></p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/pm10.svg" alt="PM10"><br>
+                    <strong>Particulate Matter (PM10)</strong>
+                    <p><span id="pm10-value">145</span> &micro;g/m<sup>3</sup></p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/co.svg" alt="CO"><br>
+                    <strong>Carbon Monoxide (CO)</strong>
+                    <p><span id="co-value">795</span> ppb</p>
+                </div>
+            </div>
+            <div class="pollutant-grid1">
+                <div class="pollutant">
+                    <img src="Images New/so2.svg" alt="SO2"><br>
+                    <strong>Sulfur Dioxide (SO2)</strong>
+                    <p><span id="so2-value">8</span> ppb</p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/no2.svg" alt="NO2"><br>
+                    <strong>Nitrogen Dioxide (NO2)</strong>
+                    <p><span id="no2-value">17</span> ppb</p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/o3.svg" alt="O3"><br>
+                    <strong>Ozone (O3)</strong>
+                    <p><span id="o3-value">8</span> ppb</p>
+                </div>
+
+                <section class="weather-info">
+                    <!-- Weather Info Box -->
+                    <section class="weather-info">
+                        <div class="weather-box">
+                            <h3>Weather Information</h3>
+                            <p><strong>Temperature:</strong> <span id="temperature">--</span> °C</p>
+                            <p><strong>Wind Speed:</strong> <span id="wind-speed">--</span> km/h</p>
+                            <p><strong>Humidity:</strong> <span id="humidity">--</span>%</p>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="aqi-scale">
+        <h2>Air Quality Index (AQI) Scale</h2><br>
+        <p>Know about the category of air quality index (AQI) your ambient air falls in and what it implies.</p>
+
+        <div class="good">
+            <div class="good1"><span><strong>Good</strong> (0 to 50)</div><br>The air is fresh and free from toxins.
+            Enjoy outdoor activities
+            without any health concerns.</span>
+            <img src="Images New/good-aqi-level.svg" alt="Good">
+        </div>
+        <div class="moderate">
+            <div class="moderate2"><span><strong>Moderate</strong> (50 to 100)</div><br>Air quality is acceptable
+            for most, but sensitive
+            individuals might experience mild discomfort.</span>
+            <img src="Images New/moderate-aqi-level.svg" alt="Moderate">
+        </div>
+        <div class="poor">
+            <div class="poor1"><span><strong>Poor</strong> (100 to 200)</div><br>Breathing may become slightly
+            uncomfortable, especially for
+            those with respiratory issues.</span>
+            <img src="Images New/poor-aqi-level.svg" alt="Poor">
+        </div>
+        <div class="unhealthy">
+            <div class="unhealthy1"><span><strong>Unhealthy</strong> (200 to 300)</div><br>This air quality is
+            particularly risky for children,
+            pregnant women, and the elderly. <br>Limit outdoor activities.</span>
+            <img src="Images New/unhealthy-aqi-level.svg" alt="Unhealthy">
+        </div>
+        <div class="severe">
+            <div class="severe1"><span><strong>Severe</strong> (300 to 400)</div><br>Prolonged exposure can cause
+            chronic health issues or
+            organ damage. <br>Avoid outdoor activities.</span>
+            <img src="Images New/severe-aqi-level.svg" alt="Severe">
+        </div>
+        <div class="hazardous">
+            <div class="hazardous1"><span><strong>Hazardous</strong> (400 to 500+)</div><br>Dangerously high
+            pollution levels.
+            <br>Life-threatening
+            health risks with prolonged exposure. Stay indoors and take precautions.</span>
+            <img src="Images New/hazardous-aqi-level.svg" alt="Hazardous">
+        </div>
+    </div>
+
+    <!-- <h2>Major Air Pollutants</h2>
+            <p>New Delhi</p> -->
+    <!-- <div class="pollutant-grid">
+            <h2>Major Air Pollutants</h2><br>
+            <p>New Delhi</p>
+            <div class="pollutant">
+                <img src="Images New/pm25.svg" alt="PM2.5"><br>
+                <strong>Particulate Matter (PM2.5)</strong>
+                <p><span id="pm25-value">88</span> &micro;g/m<sup>3</sup></p>
+            </div>
+            <div class="pollutant">
+                <img src="Images New/pm10.svg" alt="PM10"><br>
+                <strong>Particulate Matter (PM10)</strong>
+                <p><span id="pm10-value">145</span> &micro;g/m<sup>3</sup></p>
+            </div>
+            <div class="pollutant">
+                <img src="Images New/co.svg" alt="CO"><br>
+                <strong>Carbon Monoxide (CO)</strong>
+                <p><span id="co-value">795</span> ppb</p>
+            </div>
+            <div class="pollutant-grid1">
+                <div class="pollutant">
+                    <img src="Images New/so2.svg" alt="SO2"><br>
+                    <strong>Sulfur Dioxide (SO2)</strong>
+                    <p><span id="so2-value">8</span> ppb</p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/no2.svg" alt="NO2"><br>
+                    <strong>Nitrogen Dioxide (NO2)</strong>
+                    <p><span id="no2-value">17</span> ppb</p>
+                </div>
+                <div class="pollutant">
+                    <img src="Images New/o3.svg" alt="O3"><br>
+                    <strong>Ozone (O3)</strong>
+                    <p><span id="o3-value">8</span> ppb</p>
+                </div>
+            </div> -->
+    </div>
+    </div>
+
+    <!-- <div class="footer">
+        &copy; 2024 AQI Monitoring. All rights reserved.
+    </div> -->
+
+    <script>
+        // Example API call (replace with real API and logic)
+        async function fetchAQIData() {
+            const response = await fetch('https://api.example.com/aqi-data');
+            const data = await response.json();
+
+            // Update pollutant values dynamically
+            document.getElementById('pm25-value').textContent = data.pm25;
+            document.getElementById('pm10-value').textContent = data.pm10;
+            document.getElementById('co-value').textContent = data.co;
+            document.getElementById('so2-value').textContent = data.so2;
+            document.getElementById('no2-value').textContent = data.no2;
+            document.getElementById('o3-value').textContent = data.o3;
+        }
+
+        fetchAQIData();
+    </script>
+    <br>
+    <!-- Weather Info Box -->
+    <section class="weather-info">
+        <div class="weather-box">
+            <h3>Weather Information</h3>
+            <p><strong>Temperature:</strong> <span id="temperature">--</span> °C</p>
+            <p><strong>Wind Speed:</strong> <span id="wind-speed">--</span> km/h</p>
+            <p><strong>Humidity:</strong> <span id="humidity">--</span>%</p>
+        </div>
+    </section>
+    <section class="health-risks">
+        <h1>Prevent Health Problems: Understand Your Risks</h1>
+        <div class="location">Noida</div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('asthma')">Asthma</button>
+            <button class="tab" onclick="showTab('heart')">Heart Issues</button>
+            <button class="tab" onclick="showTab('allergies')">Allergies</button>
+            <button class="tab" onclick="showTab('sinus')">Sinus</button>
+            <button class="tab" onclick="showTab('cold')">Cold/Flu</button>
+            <button class="tab" onclick="showTab('copd')">Chronic (COPD)</button>
+        </div>
+        <div class="content">
+            <!-- Asthma -->
+            <div class="info-card" id="asthma" style="display: block;">
+                <h2>Asthma</h2>
+                <p>Risk of Asthma symptoms is <strong>High</strong> when AQI is <span class="aqi">Very Poor
+                        (200-300)</span>.</p>
+                <p>Severe symptoms, such as difficulty in breathing, chest tightness, and coughing.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li>✔ Use a mask while stepping outdoors.</li>
+                            <li>✔ Carry your inhaler at all times.</li>
+                            <li>✔ Check air quality daily and limit outdoor activities during high AQI.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li>✖ Engage in strenuous outdoor activities.</li>
+                            <li>✖ Ignore early signs of breathing discomfort.</li>
+                            <li>✖ Stay near industrial or construction zones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Heart Issues -->
+            <div class="info-card" id="heart" style="display: none;">
+                <h2>Heart Issues</h2>
+                <p>Risk of Heart Issues is <strong>High</strong> when AQI is <span class="aqi">Severe (300+)</span>.</p>
+                <p>Symptoms include chest pain, fatigue, and increased risk of heart attack.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li>✔ Stay in well-ventilated indoor spaces.</li>
+                            <li>✔ Keep prescribed medications handy.</li>
+                            <li>✔ Consult your doctor if symptoms worsen.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li>✖ Smoke or expose yourself to second-hand smoke.</li>
+                            <li>✖ Ignore warning signs like chest pain or dizziness.</li>
+                            <li>✖ Undertake physical exertion outdoors.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Allergies -->
+            <div class="info-card" id="allergies" style="display: none;">
+                <h2>Allergies</h2>
+                <p>Risk of Allergies is <strong>Moderate</strong> when AQI is <span class="aqi">Poor (50-200)</span>.
+                </p>
+                <p>Common symptoms include sneezing, itchy eyes, and nasal congestion.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li>✔ Use air purifiers at home.</li>
+                            <li>✔ Wash your hands and face frequently.</li>
+                            <li>✔ Keep windows closed during high pollen or pollution levels.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li>✖ Avoid areas with high pollen or dust levels.</li>
+                            <li>✖ Touch your face or eyes without washing your hands.</li>
+                            <li>✖ Ignore persistent allergy symptoms.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Sinus -->
+            <div class="info-card" id="sinus" style="display: none;">
+                <h2>Sinus</h2>
+                <p>Risk of Sinus symptoms is <strong>Mid.</strong> when AQI is <span class="aqi">Poor (50-200)</span>.
+                </p>
+                <p>Moderate to severe symptoms, such as a runny nose, facial pressure, and headache.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li>✔ Check air quality regularly to avoid exposure.</li>
+                            <li>✔ Avoid nasal allergy triggers.</li>
+                            <li>✔ Stay indoors during high pollution levels.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li>✖ Smoke or expose yourself to outdoor smoke.</li>
+                            <li>✖ Avoid strenuous activities outdoors.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Cold/Flu -->
+            <div class="info-card" id="cold" style="display: none;">
+                <h2>Cold/Flu</h2>
+                <p>Risk of Cold/Flu symptoms is <strong>High</strong> during seasonal changes and poor AQI.</p>
+                <p>Common symptoms include sore throat, fever, and body aches.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li>✔ Drink warm fluids to stay hydrated.</li>
+                            <li>✔ Wear warm clothes during cold weather.</li>
+                            <li>✔ Rest adequately to boost immunity.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li>✖ Expose yourself to sudden temperature changes.</li>
+                            <li>✖ Avoid overexertion or lack of sleep.</li>
+                            <li>✖ Neglect symptoms like high fever or prolonged cough.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Chronic COPD -->
+            <div class="info-card" id="copd" style="display: none;">
+                <h2>Chronic (COPD)</h2>
+                <p>Risk of COPD symptoms is <strong>Severe</strong> when AQI is <span class="aqi">Very Poor
+                        (200-300)</span>.</p>
+                <p>Severe symptoms, such as wheezing, breathlessness, and chronic cough.</p>
+                <div class="do-dont">
+                    <div class="dos">
+                        <h3>Do's:</h3>
+                        <ul>
+                            <li>✔ Use prescribed medications and inhalers regularly.</li>
+                            <li>✔ Stay in a pollution-free environment.</li>
+                            <li>✔ Consult a doctor if breathing issues worsen.</li>
+                        </ul>
+                    </div>
+                    <div class="donts">
+                        <h3>Don'ts:</h3>
+                        <ul>
+                            <li>✖ Smoke or stay in smoky areas.</li>
+                            <li>✖ Ignore early symptoms of breathlessness.</li>
+                            <li>✖ Stay outdoors for long periods during high pollution.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Fetch Weather Data from API
+        const fetchWeatherData = async () => {
+            try {
+                const response = await axios.get('https://api.openweathermap.org/data/2.5/weather?q=New%20Delhi&units=metric&appid=YOUR_API_KEY');
+                const data = response.data;
+
+                document.getElementById('temperature').innerText = data.main.temp;
+                document.getElementById('wind-speed').innerText = data.wind.speed;
+                document.getElementById('humidity').innerText = data.main.humidity;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        };
+
+        // Initialize Fetch
+        fetchWeatherData();
+
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.info-card');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+
+            const buttons = document.querySelectorAll('.tab');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
+    <div class="footer">
+        &copy; 2024 AQI Monitoring. All rights reserved.
+    </div>
+
+</body>
+
+</html>
